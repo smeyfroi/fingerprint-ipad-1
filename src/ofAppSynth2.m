@@ -112,31 +112,30 @@ ModPtrs ofApp::createMods2() {
 //    particleSetModPtr->receive(ParticleSetMod::SINK_FBO, fboMotionParticlesPtr);
 //  }
 
-//  { // Cluster particles
-//    auto particleSetModPtr = addMod<ParticleSetMod>(mods, "Cluster Particles", {
-//      {"strategy", "1"}, // POINTS, CONNECTIONS, BOTH
-//      {"maxParticles", "300"},
-//      {"maxParticleAge", "50"},
-//      {"particleVelocityDamping", "0.999"},
-//      {"particleAttraction", "-0.1"},
-//      {"particleAttractionRadius", "0.15"},
-//      {"particleConnectionRadius", "0.3"},
-//      {"particleDrawRadius", "0.02"},
-////      {"particleDrawRadius", "0.002"},
-//      {"colourMultiplier", "0.4"},
-//      {"forceScale", "0.15"},
-//      {"Spin", "-0.02"}
-//    });
-//    clusterModPtr->addSink(ClusterMod::SOURCE_VEC2, particleSetModPtr, ParticleSetMod::SINK_POINTS);
-//    audioPaletteModPtr->addSink(SomPaletteMod::SOURCE_RANDOM_DARK_VEC4, particleSetModPtr, ParticleSetMod::SINK_COLOR);
+  { // Cluster particles
+    auto particleSetModPtr = addMod<ParticleSetMod>(mods, "Cluster Particles", {
+      {"strategy", "1"}, // POINTS, CONNECTIONS, BOTH
+      {"maxParticles", "300"},
+      {"maxParticleAge", "50"},
+      {"particleVelocityDamping", "0.999"},
+      {"particleAttraction", "-0.1"},
+      {"particleAttractionRadius", "0.15"},
+      {"particleConnectionRadius", "0.3"},
+      {"particleDrawRadius", "0.02"},
+      {"colourMultiplier", "0.4"},
+      {"forceScale", "0.15"},
+      {"Spin", "-0.02"}
+    });
+    clusterModPtr->addSink(ClusterMod::SOURCE_VEC2, particleSetModPtr, ParticleSetMod::SINK_POINTS);
+    audioPaletteModPtr->addSink(SomPaletteMod::SOURCE_RANDOM_DARK_VEC4, particleSetModPtr, ParticleSetMod::SINK_COLOR);
 
-//    auto multiplyModPtr = addMod<MultiplyMod>(mods, "Fade Cluster Particles", {
-//      {"Multiply By", "0.98"}
-//    });
-//    particleSetModPtr->addSink(ParticleSetMod::SOURCE_FBO, multiplyModPtr, MultiplyMod::SINK_FBO);
+    auto fadeModPtr = addMod<FadeMod>(mods, "Fade Cluster Particles", {
+      {"Fade Amount", "0.0001"}
+    });
+    particleSetModPtr->addSink(ClusterMod::SOURCE_FBO, fadeModPtr, FadeMod::SINK_FBO);
 
-//    particleSetModPtr->receive(ParticleSetMod::SINK_FBO, fboClusterParticlesPtr);
-//  }
+    particleSetModPtr->receive(ParticleSetMod::SINK_FBO, fboClusterParticlesPtr);
+  }
 
 //  { // Collage layer from raw pitch/RMS points and the cluster particles FBO pixels
 //    auto pixelSnapshotModPtr = addMod<PixelSnapshotMod>(mods, "Pixel Snapshot", {});
